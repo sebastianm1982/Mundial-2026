@@ -1,0 +1,23 @@
+<%- include('partials_header') %>
+<h1>Fixture</h1>
+<p class="muted">Resultado exacto: 6 puntos. Ganador o empate correcto: 3 puntos. Los pronósticos cierran cuando empieza cada partido.</p>
+<div class="grid">
+  <% matches.forEach(m => { const closed = new Date(m.starts_at) <= now; %>
+    <article class="card match">
+      <div class="match-meta"><%= m.stage %><% if (m.group_name) { %> · Grupo <%= m.group_name %><% } %></div>
+      <h2><%= m.home_team %> vs <%= m.away_team %></h2>
+      <p class="muted"><%= new Date(m.starts_at).toLocaleString('es-AR') %></p>
+      <% if (m.is_finished) { %>
+        <p class="result">Final: <strong><%= m.home_score %> - <%= m.away_score %></strong></p>
+      <% } %>
+      <form method="post" action="/predictions/<%= m.id %>" class="score-form">
+        <input type="number" min="0" name="home_score" value="<%= m.pred_home ?? '' %>" <%= closed ? 'disabled' : '' %> required>
+        <span>-</span>
+        <input type="number" min="0" name="away_score" value="<%= m.pred_away ?? '' %>" <%= closed ? 'disabled' : '' %> required>
+        <button <%= closed ? 'disabled' : '' %>>Guardar</button>
+      </form>
+      <% if (closed) { %><p class="muted">Pronóstico cerrado.</p><% } %>
+    </article>
+  <% }) %>
+</div>
+<%- include('partials_footer') %>

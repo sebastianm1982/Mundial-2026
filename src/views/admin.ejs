@@ -1,0 +1,37 @@
+<%- include('partials_header') %>
+<h1>Panel administrador</h1>
+<section class="card">
+  <h2>Crear partido</h2>
+  <form method="post" action="/admin/matches" class="admin-form">
+    <input name="stage" placeholder="Etapa" required>
+    <input name="group_name" placeholder="Grupo, opcional">
+    <input name="home_team" placeholder="Local" required>
+    <input name="away_team" placeholder="Visitante" required>
+    <input type="datetime-local" name="starts_at" required>
+    <button class="primary">Crear</button>
+  </form>
+</section>
+<section class="card">
+  <h2>Partidos</h2>
+  <div class="admin-list">
+    <% matches.forEach(m => { %>
+      <div class="admin-row">
+        <div>
+          <strong><%= m.home_team %> vs <%= m.away_team %></strong><br>
+          <span class="muted"><%= m.stage %> · <%= new Date(m.starts_at).toLocaleString('es-AR') %></span>
+          <% if (m.is_finished) { %><br><span>Resultado: <%= m.home_score %> - <%= m.away_score %></span><% } %>
+        </div>
+        <form method="post" action="/admin/matches/<%= m.id %>/result" class="score-form small">
+          <input type="number" min="0" name="home_score" value="<%= m.home_score ?? '' %>" required>
+          <span>-</span>
+          <input type="number" min="0" name="away_score" value="<%= m.away_score ?? '' %>" required>
+          <button>Cargar resultado</button>
+        </form>
+        <form method="post" action="/admin/matches/<%= m.id %>/delete" onsubmit="return confirm('¿Eliminar partido?')">
+          <button class="danger">Eliminar</button>
+        </form>
+      </div>
+    <% }) %>
+  </div>
+</section>
+<%- include('partials_footer') %>

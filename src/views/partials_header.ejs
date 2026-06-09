@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prode Mundial</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/fixture">⚽ Prode Mundial</a>
+  <nav>
+    <% if (user) { %>
+      <a href="/fixture">Fixture</a>
+      <a href="/ranking">Ranking</a>
+      <% if (user.is_admin) { %><a href="/admin">Admin</a><% } %>
+      <form method="post" action="/logout" class="inline"><button>Salir</button></form>
+    <% } else { %>
+      <a href="/login">Ingresar</a>
+      <a href="/register">Registrarse</a>
+    <% } %>
+  </nav>
+</header>
+<main class="container">
+  <% if (error) { %><div class="alert error"><%= error %></div><% } %>
+  <% if (success) { %><div class="alert success"><%= success %></div><% } %>
